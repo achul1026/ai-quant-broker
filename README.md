@@ -1,2 +1,91 @@
-# ai-quant-broker
-AI-powered hybrid quant trading system combining technical indicators (PostgreSQL/TimescaleDB) and market sentiment analysis via LangGraph.
+# 📈 ai-quant-broker
+
+> AI-powered hybrid quant trading system combining technical indicators (PostgreSQL/TimescaleDB) and market sentiment analysis via LangGraph.
+
+**AI 하이브리드 퀀트 투자 시스템** — 전통적인 금융 시계열 데이터 분석(정형)과 LLM 멀티 에이전트의 시장 컨텍스트 추론(비정형)을 결합한 **개인용 AI 퀀트 자동매매 시스템**입니다.
+
+> ⚠️ **현재 상태: 기획 단계 (Pre-development)** — 코드는 아직 없으며 [ROADMAP.md](ROADMAP.md)의 Phase 0부터 개발을 시작할 예정입니다.
+>
+> ⚠️ **투자 위험 고지**: 자동매매는 원금 손실 위험이 있습니다. 본 프로젝트는 개인 학습·운용 목적이며 투자 수익을 보장하지 않습니다. 자세한 내용은 [RISK.md](RISK.md)를 참고하세요.
+
+---
+
+## 🎯 무엇을 하나
+
+정형 데이터(주가·기술적 지표)와 비정형 데이터(뉴스·공시 감성)를 함께 분석해 매매 판단을 내리고, 백테스팅으로 검증한 전략을 증권사 API를 통해 자동 실행합니다.
+
+- **목적**: 데이터 엔지니어링(ETL), 시계열 DB 운영, 멀티 에이전트 상태 제어 등 심화 기술 스택 업그레이드 + 데이터 기반의 안정적인 자동 매매 환경 구축.
+
+## 💡 핵심 설계 원칙
+
+- **관심사 분리 (Separation of Concerns)** — 데이터 수집 / AI 추론 / 백테스팅 / 실전 매매 레이어를 완전히 분리해 모듈화.
+- **견고한 예외 처리** — API 타임아웃, 데이터 누락, 증권사 점검 시간 등 실제 마켓 변수에 철저히 대응.
+- **비용 및 효율 최적화** — LLM 토큰 비용 최소화를 위한 데이터 전처리 및 구조화된 출력(Structured Output) 설계.
+
+## 🏗️ 시스템 아키텍처
+
+```
+[외부 데이터 소스] ─── (정기 스케줄러) ───► [데이터 파이프라인 (ETL)]
+(증권사 API, 뉴스, DART)                            │
+                                                   ▼
+┌──────────────────────────────────────────────────────────┐
+│                   데이터 저장소 & 분석                     │
+│  - PostgreSQL + TimescaleDB  (주가 시계열 데이터)          │
+│  - Vector DB                 (뉴스·공시·보고서 임베딩)     │
+└──────────────────────────────────────────────────────────┘
+                                                   │
+                                                   ▼
+┌──────────────────────────────────────────────────────────┐
+│                  AI 멀티 에이전트 브레인                   │
+│  - 상태 제어 (LangGraph): 데이터 검증 → 뉴스 분석 → 리스크 │
+│  - 하이브리드 쿼리: 기술적 지표(SQL) + 감성 점수(Vector)   │
+└──────────────────────────────────────────────────────────┘
+                                                   │
+                                                   ▼
+┌──────────────────────────────────────────────────────────┐
+│                백테스팅 및 실전 매매 엔진                  │
+│  - Backtrader (과거 데이터로 전략 검증)                    │
+│  - 증권사 Open API (모의투자 → 실전 투자 전환 구조)        │
+└──────────────────────────────────────────────────────────┘
+```
+
+## 🛠️ 기술 스택
+
+| 레이어 | 기술 스택 |
+| :--- | :--- |
+| Language | Python 3.11+ |
+| Database | PostgreSQL + TimescaleDB |
+| Vector DB | Chroma / Qdrant |
+| AI Orchestration | LangGraph / LangChain |
+| Backtesting | Backtrader / Pandas |
+| Trading API | 한국투자증권 v2 API / 키움 Open API |
+| UI Dashboard | Streamlit |
+
+## 🗺️ 개발 로드맵
+
+| Phase | 내용 | 기간 |
+| :--- | :--- | :--- |
+| **Phase 0** | 프로젝트 기반 셋업 (구조·의존성·시크릿 격리) | — |
+| **Phase 1** | 인프라 + 시계열 데이터 파이프라인 (ETL) | 1개월 |
+| **Phase 2** | AI 멀티 에이전트 + 하이브리드 분석 엔진 | 1개월 |
+| **Phase 3** | 정밀 백테스팅 + 가상 매매 시뮬레이션 | 1개월 |
+| **Phase 4** | 증권사 API 연동 + 모의투자 실전 운용 | 1개월 |
+
+단계별 상세 작업 항목과 검증 기준은 [ROADMAP.md](ROADMAP.md)를 참고하세요.
+
+## 🚨 안정성 3대 서약
+
+1. 모의투자 2주 이상 무오류 검증 전까지 실전 시드머니를 투입하지 않는다.
+2. API Key·계좌 비밀번호를 공개 저장소에 절대 커밋하지 않는다 (`.gitignore` 철저 관리).
+3. LLM 호출 시 청킹·캐싱을 적용해 API 비용 폭탄을 방지한다.
+
+전체 리스크 관리 정책은 [RISK.md](RISK.md)를 참고하세요.
+
+## 📚 프로젝트 문서
+
+| 문서 | 내용 |
+| :--- | :--- |
+| [AI_Quant_Trading_System_Plan.md](AI_Quant_Trading_System_Plan.md) | 전체 기획서 (아키텍처·기술 스택·로드맵 개요) |
+| [ROADMAP.md](ROADMAP.md) | 무엇을 어떤 순서로 만드는가 (Phase 0~4 상세) |
+| [OPERATIONS.md](OPERATIONS.md) | 어떻게 안정적으로 무인 운용하는가 |
+| [RISK.md](RISK.md) | 자본 보호·손실 제어·보안 리스크 관리 |
