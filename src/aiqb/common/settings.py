@@ -30,10 +30,10 @@ class DatabaseSettings(BaseSettings):
     password: SecretStr
 
     @property
-    def url(self) -> str:
-        """SQLAlchemy/psycopg 스타일 DSN. 비밀번호는 get_secret_value()로 추출."""
+    def dsn(self) -> str:
+        """psycopg가 읽는 표준 PostgreSQL DSN. 비밀번호는 get_secret_value()로 추출."""
         return (
-            f"postgresql+psycopg://{self.user}:{self.password.get_secret_value()}"
+            f"postgresql://{self.user}:{self.password.get_secret_value()}"
             f"@{self.host}:{self.port}/{self.name}"
         )
 
