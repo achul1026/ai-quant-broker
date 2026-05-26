@@ -7,7 +7,9 @@ authors = [
     { name = "aiden", email = "aiden.kim@bluedus.co.kr" }
 ]
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "pydantic-settings>=2.14.1",
+]
 
 [project.scripts]
 aiqb = "aiqb:main"
