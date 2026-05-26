@@ -1,0 +1,17 @@
+[project]
+name = "aiqb"
+version = "0.1.0"
+description = "AI hybrid quant trading system — TimescaleDB time-series + LangGraph multi-agent + Backtrader"
+readme = "README.md"
+authors = [
+    { name = "aiden", email = "aiden.kim@bluedus.co.kr" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+aiqb = "aiqb:main"
+
+[build-system]
+requires = ["uv_build>=0.11.16,<0.12.0"]
+build-backend = "uv_build"
